@@ -1,25 +1,23 @@
 import React from "react";
 import styled from "styled-components";
-import Header from "./Header";
 
-function Layout(props) {
+const BaseLayout = (props) => {
   return (
     <Container>
-      <Box>
-        <Header />
-        {props.children}
-      </Box>
+      <Screen>{props.children}</Screen>
     </Container>
   );
-}
+};
 
 const Container = styled.div`
+  width: 100%;
   display: flex;
   justify-content: center;
 `;
 
-const Box = styled.div`
+const Screen = styled.div`
   width: 375px;
+  padding: 0 20px;
 `;
 
-export default Layout;
+export default BaseLayout;

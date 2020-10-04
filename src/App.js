@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
 import AppRouter from "components/Router";
 import { authService } from "fBase";
-import Layout from "components/base/Layout";
 import { observer, inject } from "mobx-react";
+import { useRecoilState } from "recoil";
+import userState from "stores/UserState";
 
 const App = inject("testStore")(
   observer(({ testStore }) => {
     const [init, setInit] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [user, setUser] = useRecoilState(userState);
 
     useEffect(() => {
       _init();
@@ -17,9 +19,11 @@ const App = inject("testStore")(
       authService.onAuthStateChanged((user) => {
         if (user) {
           setIsLoggedIn(true);
-          testStore.setUser({
+          setUser({
             displayName: user.displayName,
             photoURL: user.photoURL,
+            email: user.email,
+            uid: user.uid,
           });
         } else {
           setIsLoggedIn(false);
@@ -29,10 +33,9 @@ const App = inject("testStore")(
     }
 
     return init ? (
-      <Layout>
+      <>
         <AppRouter isLoggedIn={isLoggedIn} />
-        <footer>&copy; {new Date().getFullYear()} Budget</footer>
-      </Layout>
+      </>
     ) : (
       "Initializing..."
     );
